@@ -11,9 +11,9 @@ using Microsoft.EntityFrameworkCore;
 namespace API.Controllers
 {
     
-    [ApiController]
-    [Route("api/[controller]")]
-    public class UsersController : ControllerBase
+    /* [ApiController]
+    [Route("api/[controller]")] */
+    public class UsersController :BaseApiController/* ControllerBase*/
     {
         private readonly DataContext _context;
 
@@ -23,7 +23,7 @@ namespace API.Controllers
 
         }
         [HttpGet]
-        /* [AllowAnonymous]*/
+        [AllowAnonymous]
         /*  public ActionResult<IEnumerable<AppUser>> GetUsers()
           {
               var users = _context.Users.ToList();
@@ -38,7 +38,7 @@ namespace API.Controllers
         }
 
         // api/users/id
-        /*[Authorize]*/
+        [Authorize]
         [HttpGet("{id}")]
 
 
