@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { User } from '../_models/user';
 import { AccountService } from '../_services/account.service';
-
+import { ToastrService } from 'ngx-toastr';
 @Component({
   selector: 'app-nav',
   templateUrl: './nav.component.html',
@@ -15,7 +16,7 @@ export class NavComponent implements OnInit
   
   /* kada se implementira async  pipe  linija 17 je nepotrebna jer se podaci nalaze u liniji 23*/
  /*  currentUser$ : Observable<User | null> | undefined   ; */ /* treba dodati u tsconfig.json liniju '"strictPropertyInitialization": false"'*/ 
-  constructor(/* private  */ public accountService:AccountService) { }
+  constructor(/* private  */ public accountService:AccountService, private router:Router, private toastr:ToastrService) { }
 
   ngOnInit(): void 
   {
@@ -34,26 +35,34 @@ export class NavComponent implements OnInit
       }, error: (error: User) => {console.log(error)}
     
     }) */
+/*  this.accountService.login(this.model).subscribe({
+      next:response => {console.log(response)
+                       //  this.loggedIn=true },
+      error: error => {console.log(error)} 
+    
+    })*/
+
+
     
     this.accountService.login(this.model).subscribe({
-      next:response => {console.log(response)
-                       /*  this.loggedIn=true */},
-      error: error => {console.log(error)}
+      next:response => {this.router.navigateByUrl('/members')
+                        },
+      error: error => {console.log(error),this.toastr.error(error.error)} 
     
     })
-   // this.accountService.login(this.model).subscribe({
+     /* this.accountService.login(this.model).subscribe({
       
-      //next:response => {console.log(response)},*/
-     // next:response => {this.router.navigateByUrl('/members')},
-     // error: error => {console.log(error);
-     // this.toastr.error(error.error)}*/
+      next:response => {console.log(response)},
+      next:response => {this.router.navigateByUrl('/members')},
+      error: error => {console.log(error);
+       this.toastr.error(error.error) }*/
     
-    }
+    } 
     logout()
     {
 
     this.accountService.logout();
-    /* this.router.navigateByUrl('/') */
+    this.router.navigateByUrl('/')
     
     /* this.loggedIn=false */;
     }
