@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-
+import { User } from './_models/user';
+import { AccountService } from './_services/account.service';
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -9,14 +10,21 @@ import { Component, OnInit } from '@angular/core';
 /*export class AppComponent*/ export class AppComponent implements OnInit {
   title = 'The Dateing App';
   users:any;
-  constructor(private  http:HttpClient/*private accountService:AccountService*/){}
+  constructor(/* private  http:HttpClient, */ private accountService:AccountService){}
   ngOnInit() /*void*/ {
     /*throw new Error('Method not implemented.');formiran interfejs za liniju 9*/
   
-  this.getUsers();
+ /*  this.getUsers(); */
+  this.setCurrentUser();
+  }
+  setCurrentUser()
+  {
+  const user: User=JSON.parse(localStorage.getItem('user')||'{}');
+  this .accountService.setCurrentUser(user);
   
   }
-  getUsers()
+ 
+ /*  getUsers()
   
   {
 
@@ -26,10 +34,10 @@ import { Component, OnInit } from '@angular/core';
     });
 
 
-   }
+   } */
 
 }
-function getUsers() {
+  function getUsers() {
   throw new Error('Function not implemented.');
 }
 
