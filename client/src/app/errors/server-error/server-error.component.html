@@ -1,0 +1,18 @@
+<!-- <h4>Internal server error- refreshing will make error to disappier</h4> -->
+<ng-container *ngIf="error" >
+    <h4>Internal server error- refreshing will make error to disappier</h4> 
+<h5 class='text-danger'>Error:{{error.message}}</h5>
+
+<p class="font-weight-bold">Angular is not responsile for this error</p>
+<p>What to do next?</p>
+<ol>
+<li>Open Chromedev tools</li>
+<li>Inspect the network tab</li>
+<li>Check the failing request</li>
+<li>Inspect the network tab</li>
+<li>Examine the requested Url</li>
+<li>Reproduce error in Postman</li>
+</ol>
+<p>Folowing is stack-trace</p>
+<code class="ng-5" style="background-color: aqua;">{{error.details}}</code>
+</ng-container>

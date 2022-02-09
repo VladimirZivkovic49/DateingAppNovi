@@ -20,6 +20,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using System.Configuration;
 using API.Extensions;
+using API.MiddleWare;
 
 namespace API
 {
@@ -74,11 +75,12 @@ namespace API
         {
             if (env.IsDevelopment())
             {
-                app.UseDeveloperExceptionPage();
+               /*  app.UseDeveloperExceptionPage(); */
                 app.UseSwagger();
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "API v1"));
             }
-
+            
+            app.UseMiddleware<ExeptionMiddleWare>();
             app.UseHttpsRedirection();
 
             app.UseRouting();
