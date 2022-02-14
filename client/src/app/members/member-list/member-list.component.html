@@ -1,1 +1,9 @@
-<p>member-list works!</p>
+<!-- <h1>{{title}}</h1> -->
+
+<div *ngFor="let member of members" class="container" style="margin-top: 100px;" >
+  
+  <app-members-card [member]="member"></app-members-card>
+   
+     
+   
+  </div>
