@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { User } from '../_models/user';
 import { AccountService } from '../_services/account.service';
 import { ToastrService } from 'ngx-toastr';
+
 @Component({
   selector: 'app-nav',
   templateUrl: './nav.component.html',
@@ -74,5 +75,6 @@ export class NavComponent implements OnInit
   error: error => {console.log(error)}
     })
   } */
+  
   
   }

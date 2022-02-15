@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using API.Data;
 using API.DTOs;
@@ -30,9 +31,6 @@ public UsersController(DataContext context)
 _context = context;
 
 } ( Kada se uvede repository ovo ne treba)*/
-
-
-
 
 
         public UsersController(IUserRepository userRepository,IMapper mapper)
@@ -86,8 +84,27 @@ _context = context;
              return  await _userRepository.GetMemberAsync(username);
            /*  return _mapper.Map<MemberDto>(user); */
         }
+[HttpPut]
+ public async Task<ActionResult<MemberUpdateDto>> UpdateUser(MemberUpdateDto memberUpdateDto)
+      {
+          var username=User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+          var user=await _userRepository.GetUsersByUserNameAsync(username);
+         _mapper.Map(memberUpdateDto,user);
+         _userRepository.Update(user);
+
+         if(await _userRepository.SaveAllAsync())
+         {
+             return NoContent();
+
+         }
+            else
+            {
+                return BadRequest("Fail tio update user");
+
+            }
 
 
+       }
     }
 
 }
