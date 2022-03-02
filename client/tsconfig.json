@@ -31,5 +31,7 @@
     /* "strictTemplates": true */
    "strictTemplates": false,
    /* "strictTypeChecking": false */
+   "strictNullChecks": false,
+   "noImplicitAny": false 
   }
 }

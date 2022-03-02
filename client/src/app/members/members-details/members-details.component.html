@@ -18,14 +18,17 @@
                 </div>
                 <div>
                     <strong>Last activity:</strong>
-                    <p>{{member.lastActive}}</p>
-
+                    <!-- <p>{{member.lastActive}}</p> -->
+                       <p>{{member.lastActive | timeago}}</p>
                 </div>
 
                 <div>
                     <strong>Member since:</strong>
-                    <p>{{member.created}}</p>
-
+                   <!--  <p>{{member.created}}</p> -->
+                   <!-- (L165) -->
+                   <!-- <p>{{member.created | date}}</p> -->
+                        <p>{{member.created | date:'longDate'}}</p>
+                   <!-- (L165) -->
                 </div>
                
               

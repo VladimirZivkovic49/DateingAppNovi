@@ -19,6 +19,9 @@ namespace API.Extensions
                services.Configure<CloudinarySettings>(configuration.GetSection("CloudinarySettings"));
                services.AddScoped<ITokenService,TokenService>();
                services.AddScoped<IPhotoService,PhotoService>();
+               //(L162)
+                services.AddScoped<LogUserActivity>();
+               //(L162)
                services.AddScoped<IUserRepository,UserRepository>();
                services.AddAutoMapper(typeof(AutoMapperProfiles).Assembly);
                string mySqlConnectionStr=configuration.GetConnectionString("DefaultConnection");

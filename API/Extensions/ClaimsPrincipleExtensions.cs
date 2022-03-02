@@ -10,8 +10,19 @@ namespace API.Extensions
     {
          public static string GetUsername(this ClaimsPrincipal user)
          {
-          return user.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-
+          /* return user.FindFirst(ClaimTypes.NameIdentifier)?.Value; */
+         //(L163)
+          return user.FindFirst(ClaimTypes.Name)?.Value;
+          //(L163)
          }
+            //(L163)
+             public static int GetUserId(this ClaimsPrincipal user)
+         {
+                   
+                return int.Parse( user.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+          
+         }
+            //(L163)
+   
     }
 }
