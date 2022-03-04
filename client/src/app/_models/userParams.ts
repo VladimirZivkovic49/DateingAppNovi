@@ -20,7 +20,7 @@ export class UserParams
     {
         this.gender=user?.gender==='female'? 'male':'female';
         this.minAge=18;
-        this.maxAge=99;
+        this.maxAge=99;/*  */
         
         this.pageNumber=1;
         this.pageSize=5; 

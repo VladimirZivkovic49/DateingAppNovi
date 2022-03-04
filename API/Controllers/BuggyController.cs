@@ -65,8 +65,8 @@ namespace API.Controllers
         public ActionResult<string> GetBadRequest()
         {
 
-            return BadRequest("This was bad request");
-
+            /* return BadRequest("This was bad request"); (l175)*/
+            return BadRequest();
         }
 
     }

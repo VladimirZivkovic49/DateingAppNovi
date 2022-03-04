@@ -287,5 +287,39 @@ params=params.append('pageSize', itemsPerPage.toString());
       return this.http.delete(this.baseUrl+'users/delete-photo/'+photoId,{});
 
     }
+//(L175)
+addLike(username:string)
+{
+return this.http.post(this.baseUrl + 'likes/'+ username,{});// {} emty body for empty object
 
+}
+
+/* getLikes(predicate:string|any)
+{
+return this.http.get(this.baseUrl + 'likes?=', predicate);
+
+} */
+//(L176)
+/* getLikes(predicate:string)
+{
+return this.http.get<Partial<Member[]>>(this.baseUrl + 'likes?predicate='+ predicate);
+
+}  */
+//(178)
+
+getLikes(predicate:string, pageNumber:number, pageSize: number)
+{
+  /* let params=this.getPaginationHeaders(pageNumber, pageSize); */
+  let params = new HttpParams();
+  params= params.append('predicate',predicate);
+  params= params.append('pageNumber',pageNumber.toString());
+  params= params.append('pageSize',pageSize.toString());
+  return this.getPaginatedResult<Partial<Member[]>>(this.baseUrl + 'likes', params);
+
+
+}  
+
+//(178)
+//(L176)
+//(L175)
   }
