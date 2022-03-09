@@ -9,6 +9,7 @@ import { PaginatedResult } from '../_models/pagination';
 import { User } from '../_models/user';
 import { UserParams } from '../_models/userParams';
 import { AccountService } from './account.service';
+import { getPaginatedResult, getPaginationHeaders } from './paginationHelper';
 /* const httpOptions=
 {
   
@@ -93,7 +94,7 @@ return this.userParams;
     
     
       //(L159)
-      let params=this.getPaginationHeaders(userParams.pageNumber, userParams.pageSize);
+      let params=getPaginationHeaders(userParams.pageNumber, userParams.pageSize);
       params=params.append('minAge', userParams.minAge.toString());
       params=params.append('maxAge', userParams.maxAge.toString());
       params=params.append('gender', userParams.gender.toString());
@@ -103,7 +104,7 @@ return this.userParams;
       /*  return this.getPaginatedResult<Member[]>(this.baseUrl + 'users',params); */
    /*  return this.getPaginatedResult<Member[]>(this.baseUrl + 'users', params); */
     //(L166)
-    return this.getPaginatedResult<Member[]>(this.baseUrl + 'users', params)
+    return getPaginatedResult<Member[]>(this.baseUrl + 'users', params,this.http)
     .pipe(map(response=>
       {
         this.memberCache.set(Object.values(userParams).join('-'),response);
@@ -165,20 +166,11 @@ return this.userParams;
       //  })
     //) 
   }
- private getPaginatedResult<T>(url: string,params: HttpParams)
+  /* private getPaginatedResult<T>(url: string,params: HttpParams)
  {
-  const paginatedResult:PaginatedResult<T> = new PaginatedResult<T>();
-  return this.http.get<T>(url  /* 'users' */, {observe: 'response', params } ).pipe(      
-  map(response=>{
-   paginatedResult.result=response.body;
-    if(response.headers.get('Pagination')!=null)
-    {
-      paginatedResult.pagination=JSON.parse(response.headers.get('Pagination')||'{}');
-    }
-    return paginatedResult;
-   })
-  )
- }
+   Prebačeno u paginationHelper.ts (L187)
+ } */
+ 
  //(L159)
   /* private getPaginatedResult<T>(url: string,params: HttpParams)
   { */
@@ -198,27 +190,12 @@ return this.userParams;
   } */
   //(L159)
  //(L159)
-   private getPaginationHeaders(pageNumber:number, pageSize: number)
+  
+ /* private getPaginationHeaders(pageNumber:number, pageSize: number)
   {
-   let params = new HttpParams();
- 
-     var aa=pageNumber.toString();
-     var bb=pageSize.toString();
-    params=params.append('pageNumber', aa);
-    params=params.append('pageSize',bb );
-    return params;
+       Prebačeno u paginationHelper.ts (L187)
+  } */
 
- 
-/* let params=new HttpParams;
-if((page!==null && page!==undefined ) && (itemsPerPage!==null && itemsPerPage!==undefined))
-{
-params=params.append('pageNumber', page.toString());
-params=params.append('pageSize', itemsPerPage.toString());
-
-
-} */
-
-} 
 
   
  //(L159)
@@ -310,12 +287,14 @@ return this.http.get<Partial<Member[]>>(this.baseUrl + 'likes?predicate='+ predi
 getLikes(predicate:string, pageNumber:number, pageSize: number)
 {
   /* let params=this.getPaginationHeaders(pageNumber, pageSize); */
-  let params = new HttpParams();
+  
+  /* let params = new HttpParams(); */
+  let params=getPaginationHeaders(pageNumber, pageSize)
   params= params.append('predicate',predicate);
-  params= params.append('pageNumber',pageNumber.toString());
-  params= params.append('pageSize',pageSize.toString());
-  return this.getPaginatedResult<Partial<Member[]>>(this.baseUrl + 'likes', params);
-
+  /* params= params.append('pageNumber',pageNumber.toString());
+  params= params.append('pageSize',pageSize.toString()); */
+  /* return this.getPaginatedResult<Partial<Member[]>>(this.baseUrl + 'likes', params); (L187) */
+  return getPaginatedResult<Partial<Member[]>>(this.baseUrl + 'likes', params,this.http);
 
 }  
 

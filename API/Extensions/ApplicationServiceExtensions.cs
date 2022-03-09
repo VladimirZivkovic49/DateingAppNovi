@@ -23,6 +23,10 @@ namespace API.Extensions
                //(L172)
                 services.AddScoped<ILikeRepository,LikesRepository>();
                //(L172)
+              //(182)
+                services.AddScoped<IMessageRepository,MessageRepository>();
+
+              //(182)
                //(L162)
                 services.AddScoped<LogUserActivity>();
                //(L162)

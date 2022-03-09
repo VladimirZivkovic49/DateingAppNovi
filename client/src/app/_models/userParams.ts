@@ -16,6 +16,7 @@ export class UserParams
     pageNumber:number;
     pageSize:number;
     orderBy:string;
+    
     constructor(user:User|null) 
     {
         this.gender=user?.gender==='female'? 'male':'female';
@@ -24,7 +25,8 @@ export class UserParams
         
         this.pageNumber=1;
         this.pageSize=5; 
-        this.orderBy='lastActive'
+        this.orderBy='lastActive';
+        
     }
 
 

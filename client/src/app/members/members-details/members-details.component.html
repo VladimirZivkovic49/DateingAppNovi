@@ -1,5 +1,5 @@
 <!-- <h1 *ngIf="member">{{member.knownAs}}</h1> -->
-<div class="row" *ngIf="member">
+<div class="row"><!-- <div class="row" *ngIf="member">  (L192)-->
     <div class="cl-4">
         <div class="card">
             <div id="ImgSize">
@@ -41,7 +41,9 @@
                    
                     <div class="btn-group d-flex">
                       <button class="btn btn-primary">Like</button>
-                      <button class="btn btn-success">Message</button>
+                      <button class="btn btn-success" (click)="selectTab(3)"><!-- <button class="btn btn-success"> (L192) -->
+                          Message
+                        </button>
                     </div>
 
                     
@@ -50,26 +52,29 @@
         </div>
         <div class="cl-8">
 
-            <tabset class="member-tabset">
-                <tab heading='About {{member.knownAs}}'>
+            <tabset class="member-tabset" #memberTabs>
+                <tab heading='About {{member.knownAs}}' (selectTab)="onTabActivated($event)"><!-- <tab heading='About {{member.knownAs}}'>  (L191)-->
                     <h4>Description</h4>
                     <p>{{member.introduction}}</p>
                     <h4>Looking for</h4>
                     <p>{{member.lookingFor}}</p>
                 </tab>
-                <tab heading='Intersts'>
+                <tab heading='Intersts' (selectTab)="onTabActivated($event)"><!-- <tab heading='Interts'>  (L191)-->
                     <h4>Interests</h4>
                     <p>{{member.interests}}</p>
                     
                 </tab>
-                <tab heading='Photos'>
+                <tab heading='Photos' (selectTab)="onTabActivated($event)"><!-- <tab heading='Photos'>  (L191)-->
                     <ngx-gallery [options]="galleryOptions" [images]="galleryImages" style="display: inline-block; margin-bottom: 20px;"></ngx-gallery>
                    <!--  <p>Photos goes here</p> -->
                     
                 </tab>
-                <tab heading='Messages'>
+                <tab heading='Messages' (selectTab)="onTabActivated($event)" ><!-- <tab heading='Messages'>  (L191)-->
                    
-                    <p>Messages goes here</p>
+                    <!-- <p>Messages goes here</p>(L189) -->
+                <!-- <app-member-messages [messages]="messages"> (L194)--><!-- <app-member-messages [username]="member.username">  (L191)-->
+                    <app-member-messages [messages]="messages" [username]="member.username">
+                </app-member-messages>
                 </tab>
         
             </tabset>

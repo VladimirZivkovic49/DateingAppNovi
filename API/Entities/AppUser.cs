@@ -27,7 +27,12 @@ namespace API.Entities
 
         public ICollection<UserLike>LikedByUsers { get; set; }
         public ICollection<UserLike>LikedUsers { get; set; }
-    
+       //(L181)
+        public ICollection<Message>MessagesSent { get; set; }
+        public ICollection<Message>MessagesRecived { get; set; }
+       //(L181)
+       
+       
        /*  public int GetAge(){
            return DateOfBirth.CalculateAge();
         } */
