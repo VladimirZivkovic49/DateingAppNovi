@@ -50,7 +50,7 @@ _context = context;
         
         }
        
-       
+       /* [Authorize(Roles ="Member")] //bilo "Admin" */
         [HttpGet]
         /* [AllowAnonymous] */
         /*  public ActionResult<IEnumerable<AppUser>> GetUsers()
@@ -94,6 +94,8 @@ _context = context;
        /*  [HttpGet("{id}")] */
 
         /* [HttpGet("{username}")] (L129) */
+       
+      /*  [Authorize(Roles ="Member")] */
         [HttpGet("{username}",Name ="GetMember")]
         /*public ActionResult<AppUser> GetUser(int id)
         {

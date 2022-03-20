@@ -7,5 +7,7 @@ photoUrl:string ;
 knownAs:string ;
 gender:string ;
 //(159)
-
+//(L212)
+roles: string[] | null;
+//(L212)
 }

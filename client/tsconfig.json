@@ -18,6 +18,8 @@
     "importHelpers": true,
     "strictPropertyInitialization": false,
     "target": "es2017",
+   
+   
     "module": "es2020",
     "lib": [
       "es2020",
@@ -32,6 +34,7 @@
    "strictTemplates": false,
    /* "strictTypeChecking": false */
    "strictNullChecks": false,
-   "noImplicitAny": false 
+   "noImplicitAny": false ,
+  
   }
 }

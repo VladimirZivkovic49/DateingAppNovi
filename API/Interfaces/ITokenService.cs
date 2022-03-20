@@ -8,6 +8,7 @@ namespace API.Interfaces
 {
     public interface ITokenService
     {
-        string CreateToken(AppUser user);
+        /* string CreateToken(AppUser user); (L207)  Promena u metodi string --> Task*/
+       Task<string> CreateToken(AppUser user);
     }
 }

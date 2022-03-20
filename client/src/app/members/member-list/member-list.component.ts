@@ -21,8 +21,8 @@ export class MemberListComponent implements OnInit {
  /* pageNumber=1;
  pageSize=5; (L159)  */
  //(L159) */
- userParams:UserParams;
- user: User|null ;
+ userParams:UserParams ;
+ user: User ;
 //(L159)
 //(L160)
 genderList=[{value :'male',display:'Males'},{value :'female',display:'Females'}]

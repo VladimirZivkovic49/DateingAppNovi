@@ -84,7 +84,7 @@ return this.userParams;
      { 
     //(L166)
        // console.log(Object.values(userParams).join('-')); 
-      var response = this.memberCache.get(Object.values(userParams).join('-'))
+      var response = this.memberCache.get(Object.values(userParams).join('-'));
       if(response)
       {
         return of(response);
