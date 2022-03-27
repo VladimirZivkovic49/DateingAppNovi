@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { User } from './_models/user';
 import { AccountService } from './_services/account.service';
+import { PresenceService } from './_services/presence.service';
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -10,7 +11,8 @@ import { AccountService } from './_services/account.service';
 /*export class AppComponent*/ export class AppComponent implements OnInit {
   title = 'The Dateing App';
   users:any;
-  constructor(/* private  http:HttpClient, */ private accountService:AccountService){}
+ // constructor(/* private  http:HttpClient, */ private accountService:AccountService){} (L222)
+ constructor( private accountService:AccountService, private presence:PresenceService){}
   ngOnInit() /*void*/ {
     /*throw new Error('Method not implemented.');formiran interfejs za liniju 9*/
   
@@ -19,8 +21,19 @@ import { AccountService } from './_services/account.service';
   }
   setCurrentUser()
   {
+  /* const user: User=JSON.parse(localStorage.getItem('user')||'{}');
+  this .accountService.setCurrentUser(user); L(222) */
+
+  //(L222)
   const user: User=JSON.parse(localStorage.getItem('user')||'{}');
-  this .accountService.setCurrentUser(user);
+      if(user)
+      {
+        this .accountService.setCurrentUser(user);
+        this.presence.createHubConnection(user);
+      }
+
+ 
+  //(L222)
   
   }
  

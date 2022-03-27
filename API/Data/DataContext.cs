@@ -23,6 +23,13 @@ namespace API.Data
    //(L181)
         public DbSet<Message> Messages{ get; set; }
    //(L181)
+     //(L230)
+        public DbSet<Group> Groups { get; set; }
+        public DbSet<Connection> Connections { get; set; }
+     //(L230)
+     
+     
+     
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);

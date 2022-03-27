@@ -44,3 +44,14 @@ opacity:1;
 width: 150px;
 height: 150px;
 }
+@keyframes fa-blink
+{
+0% {opacity: 1;}
+100% {opacity:0.4;}
+}
+.is-online
+{
+animation: fa-blink 1.5s  linear infinite;
+color:rgb(0,225,0);
+
+}

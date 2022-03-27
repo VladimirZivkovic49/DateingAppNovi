@@ -14,7 +14,11 @@ export class MemberMessagesComponent implements OnInit {
  messages:Message[]|any; (L191) */
  /*  constructor(private messageService:MessageService) { } (L191) */
 //(L194)
- constructor(private messageService:MessageService) { }
+ /* constructor(private messageService:MessageService) { } (L228) */
+
+ //(L228)
+ constructor(public messageService:MessageService) { }
+ //(L228)
  @Input() username:string;
  @ViewChild('messageForm') messageForm:NgForm;
  messageContent:string;
@@ -46,11 +50,13 @@ export class MemberMessagesComponent implements OnInit {
 //(194)
 sendMessage()
 {
-this.messageService.sendMessage(this.username,this.messageContent).subscribe
+/* this.messageService.sendMessage(this.username,this.messageContent).subscribe (L229) */
+this.messageService.sendMessage(this.username,this.messageContent).then
+
 (
-  message=> 
+  ()=> 
   {
-    this.messages.push(message);
+   /*  this.messages.push(message);  (L229)*/
     this.messageForm.reset();
   }
 

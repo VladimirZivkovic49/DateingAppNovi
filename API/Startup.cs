@@ -21,6 +21,7 @@ using System.Text;
 using System.Configuration;
 using API.Extensions;
 using API.MiddleWare;
+using API.SignalR;
 
 namespace API
 {
@@ -54,6 +55,11 @@ namespace API
         
          services.AddCors();
          services.AddIdentityServices(_config);
+
+         //(L220)
+         services.AddSignalR();
+         //(L220)
+         
          /*services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
            .AddJwtBearer(options =>
            {
@@ -84,13 +90,23 @@ namespace API
             app.UseHttpsRedirection();
 
             app.UseRouting();
-            app.UseCors(x => x.AllowAnyHeader().AllowAnyMethod().WithOrigins("https://localhost:4200"));
+            /* app.UseCors(x => x.AllowAnyHeader().AllowAnyMethod().WithOrigins("https://localhost:4200"));  (L221)*/
+            app.UseCors(x => x.AllowAnyHeader().AllowAnyMethod().AllowCredentials().WithOrigins("https://localhost:4200"));
             app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+                //L220)
+
+                    endpoints.MapHub<PresenceHub>("hubs/presence");
+                //(L220)
+                 //L225)
+
+                    endpoints.MapHub<MessageHub>("hubs/message");
+                //(L225)
+            
             });
         }
     }

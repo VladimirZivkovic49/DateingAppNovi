@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { NgxGalleryAnimation, NgxGalleryImage, NgxGalleryOptions } from '@kolkov/ngx-gallery';
 import { TabDirective, TabsetComponent } from 'ngx-bootstrap/tabs';
@@ -8,13 +8,18 @@ import { Member } from 'src/app/_models/member';
 import { MembersService } from 'src/app/_services/members.service';
 import { Message } from 'src/app/_models/message';
 import { MessageService } from 'src/app/_services/message.service';
+import { PresenceService } from 'src/app/_services/presence.service';
+import { AccountService } from 'src/app/_services/account.service';
+import { User } from 'src/app/_models/user';
+import { take } from 'rxjs';
 
 @Component({
   selector: 'app-members-details',
   templateUrl: './members-details.component.html',
   styleUrls: ['./members-details.component.css']
 })
-export class MembersDetailsComponent implements OnInit {
+/* export class MembersDetailsComponent implements OnInit { (L228)*/
+export class MembersDetailsComponent implements OnInit, OnDestroy {
  //(L191)
  /*  @ViewChild('memberTabs') memberTabs:TabsetComponent;(L192) */
   //(L191)
@@ -22,9 +27,13 @@ export class MembersDetailsComponent implements OnInit {
   //(L192)
 
   //(L192)
-  member:Member ;
+ member:Member ;
  galleryOptions: NgxGalleryOptions[];
  galleryImages: NgxGalleryImage[];
+
+ //(L228)
+    user:User|any
+ //(L228)
 //(L191)
  activeTab:TabDirective;
  messages: Message[] | any=[];
@@ -32,7 +41,32 @@ export class MembersDetailsComponent implements OnInit {
  
   
   /* constructor(private memberService:MembersService, private route:ActivatedRoute) { } (L191) */
-  constructor(private memberService:MembersService, private route:ActivatedRoute, private messageService:MessageService) { }
+ /*  constructor(private memberService:MembersService, private route:ActivatedRoute, private messageService:MessageService) { } (L224)*/
+  //(L224)
+/*  constructor(private memberService:MembersService, private route:ActivatedRoute,
+     private messageService:MessageService, public presence: PresenceService) { } (L228) */
+//(L224)
+//(228)
+constructor(private memberService:MembersService,
+  private route: ActivatedRoute,
+  private messageService: MessageService,
+  public presence: PresenceService,
+  private accountService: AccountService)
+   {
+      this.accountService.currentUser$.pipe
+      (
+          take(1)
+      )
+        .subscribe
+        (
+          user=> this.user=user
+
+        )
+    }
+ 
+//(L228)
+
+
   ngOnInit(): void {
     /* this.loadMemeber(); (L193)*/
 
@@ -127,12 +161,27 @@ onTabActivated(data:TabDirective)
 this.activeTab=data;
 if(this.activeTab.heading==='Messages' )/* && this.messages.length===0 */
 {
-this.loadMessages();
+/* this.loadMessages();(L228) */
+
+//(L228)
+  this.messageService.createHubConnection(this.user,this.member.username)
+//(L228)
 
 }
-
+//(L228)
+else
+{
+ this.messageService.stopHubConnection();
 }
 
+//(L228)
+
+}
+//(L228)
+ngOnDestroy(): void {
+  this.messageService.stopHubConnection();
+}
+//(L228)
 //(L191)
 
 //(L192)

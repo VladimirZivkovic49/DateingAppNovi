@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { map, ReplaySubject } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { User } from '../_models/user';
+import { PresenceService } from './presence.service';
 @Injectable({
   providedIn: 'root'
 })
@@ -11,7 +12,11 @@ export class AccountService {
   baseUrl=environment.apiUrl;
   private currentUserSource=new ReplaySubject<User |null>(1);
   currentUser$=this.currentUserSource.asObservable();
-  constructor(private http:HttpClient) { }
+  /* constructor(private http:HttpClient) { } (L222) */
+
+  //(L222)
+  constructor(private http:HttpClient,private presence:PresenceService){}
+  //(L222)
   login(model:/* any */User) 
   {
    /*  return this.http.post(this.baseUrl +'account/login', model); */
@@ -23,6 +28,10 @@ export class AccountService {
       if(user)  
        {
              this.setCurrentUser(user);  
+           //(L222)
+              this.presence.createHubConnection(user);
+
+           //(L222)
              /* localStorage.setItem('user',JSON.stringify(user));
              this.currentUserSource.next(user);  (L134)*/
        }
@@ -40,7 +49,12 @@ export class AccountService {
       if(user)  
        {
              this.setCurrentUser(user);   
-            /*  localStorage.setItem('user',JSON.stringify(user)); 
+           //(L222)
+           this.presence.createHubConnection(user);
+
+           //(L222)
+           
+             /*  localStorage.setItem('user',JSON.stringify(user)); 
              this.currentUserSource.next(user);(L134) */
        }
     return user;
@@ -70,7 +84,10 @@ export class AccountService {
       localStorage.removeItem('user');
       
       this.currentUserSource.next(null);
-   
+   //(L222)
+   this.presence.stopHubConnection();
+
+   //(L222)
   }
   getDecodedToken(token : string)
   {

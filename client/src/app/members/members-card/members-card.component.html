@@ -42,7 +42,22 @@
     </div>
     <div class="card-body-p1">
         <!-- <h6 class="card-title text-left mb-1" ><i class="fa fa-user mr-2"></i> {{member.knownAs}} </h6> (L160)-->
-        <h6 class="card-title text-left mb-1" ><i class="fa fa-user mr-2"></i> {{member.knownAs}},{{member.age}} </h6>
+        <h6 class="card-title text-left mb-1" >
+          <!-- (L224) -->
+                <span [class.is-online]="(presence.onlineUsers$ | async).includes(member.username)">
+                    <i class="fa fa-user mr-2">
+                    </i>
+                    
+                </span>
+
+          <!-- (L224) -->
+           <!--  <i class="fa fa-user mr-2">
+            </i>(L224) -->
+             {{member.knownAs}},{{member.age}} 
+        
+        
+        </h6>
+              
         <p class="card-text text-muted text-center">{{member.city}}</p>
     </div>
 </div>
