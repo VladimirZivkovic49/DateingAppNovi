@@ -23,18 +23,20 @@ namespace API.Extensions
                services.Configure<CloudinarySettings>(configuration.GetSection("CloudinarySettings"));
                services.AddScoped<ITokenService,TokenService>();
                services.AddScoped<IPhotoService,PhotoService>();
-
+                //(L238)
+              services.AddScoped<IUnitOfWork,UnitOfWork>();
+                //(L238)
                //(L172)
-                services.AddScoped<ILikeRepository,LikesRepository>();
+                /* services.AddScoped<ILikeRepository,LikesRepository>();  (L238)*/
                //(L172)
               //(182)
-                services.AddScoped<IMessageRepository,MessageRepository>();
+                /* services.AddScoped<IMessageRepository,MessageRepository>(); (L238)*/
 
               //(182)
                //(L162)
                 services.AddScoped<LogUserActivity>();
                //(L162)
-               services.AddScoped<IUserRepository,UserRepository>();
+               /* services.AddScoped<IUserRepository,UserRepository>();(L238) */
                services.AddAutoMapper(typeof(AutoMapperProfiles).Assembly);
                string mySqlConnectionStr=configuration.GetConnectionString("DefaultConnection");
                services.AddDbContextPool<DataContext>(options=>options.UseMySQL(mySqlConnectionStr));

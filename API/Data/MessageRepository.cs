@@ -73,7 +73,11 @@ namespace API.Data
         public async Task<PagedList<MessageDto>> GetMessagesForUser(MessageParams messageParams)
         {
             var query= _context.Messages.
-            OrderByDescending(m=>m.MessageSent).AsQueryable();
+            OrderByDescending(m=>m.MessageSent)
+            //(L240)
+            .ProjectTo<MessageDto>(_mapper.ConfigurationProvider)
+            //(L240)
+            .AsQueryable();
             /*  query = messageParams.Container switch
              {
                  "Inbox"=> query.Where(u=>u.Recipient.UserName==messageParams.UserName),
@@ -83,25 +87,33 @@ namespace API.Data
              }; (L196)*/
             query = messageParams.Container switch
             {
-                "Inbox" => query.Where(u => u.Recipient.UserName == messageParams.UserName
+                /* "Inbox" => query.Where(u => u.Recipient.UserName == messageParams.UserName
                                         && u.RecipientDelited==false),
                 "Outbox" => query.Where(u => u.Sender.UserName == messageParams.UserName
                                           && u.SenderDelited==false),   
-                _ => query.Where(u => u.Recipient.UserName == messageParams.UserName &&  u.RecipientDelited==false && u.DateRead == null)
+                _ => query.Where(u => u.Recipient.UserName == messageParams.UserName &&  u.RecipientDelited==false && u.DateRead == null) (L240) */
+                //(L240)
+                   "Inbox" => query.Where(u => u.RecipientUsername == messageParams.UserName
+                                        && u.RecipientDelited==false),
+                "Outbox" => query.Where(u => u.SenderUsername == messageParams.UserName
+                                          && u.SenderDelited==false),   
+                _ => query.Where(u => u.RecipientUsername == messageParams.UserName &&  u.RecipientDelited==false && u.DateRead == null)
+                //(L240)
+
 
             }; 
 
-            var messages = query.ProjectTo<MessageDto>(_mapper.ConfigurationProvider); 
-            return await PagedList<MessageDto>.CreateAsync(messages, messageParams.PageNumber,messageParams.PageSize);
-        
+           /*  var messages = query.ProjectTo<MessageDto>(_mapper.ConfigurationProvider);   (L240) */
+            /* return await PagedList<MessageDto>.CreateAsync(messages, messageParams.PageNumber,messageParams.PageSize); (L240) */
+             return await PagedList<MessageDto>.CreateAsync(query, messageParams.PageNumber,messageParams.PageSize);
         }
 
         public async Task<IEnumerable<MessageDto>>
          GetMessagesThread(string currentUserName, string recipientUserName)
         {
             var messages= await _context.Messages
-            .Include(u=>u.Sender).ThenInclude(p=>p.Photos)
-            .Include(u=>u.Recipient).ThenInclude(p=>p.Photos)
+            /* .Include(u=>u.Sender).ThenInclude(p=>p.Photos)
+            .Include(u=>u.Recipient).ThenInclude(p=>p.Photos) (L240)*/
             /* .Where(m=>m.Recipient.UserName==recipientUserName (L196)*/
            .Where(m=>m.Recipient.UserName==recipientUserName && m.RecipientDelited==false 
             && m.Sender.UserName==currentUserName
@@ -109,10 +121,14 @@ namespace API.Data
             /* && m.Sender.UserName==recipientUserName) (L196)*/
             && m.Sender.UserName==recipientUserName && m.SenderDelited==false )
             .OrderBy(m=> m.MessageSent)
+            //(L240)
+                .ProjectTo<MessageDto>(_mapper.ConfigurationProvider)
+            //(L240)
             .ToListAsync();
         
         var unreadMessages= messages
-        .Where(m=>m.DateRead==null && m.Recipient.UserName==currentUserName)
+       /*  .Where(m=>m.DateRead==null && m.Recipient.UserName==currentUserName)(L240) */
+        .Where(m=>m.DateRead==null && m.RecipientUsername==currentUserName)
         .ToList();
        
        if(unreadMessages.Any())
@@ -122,11 +138,11 @@ namespace API.Data
                /*  message.DateRead=DateTime.Now; (L232) */
                      message.DateRead=DateTime.UtcNow;
          }
-             await _context.SaveChangesAsync();
+           /*   await _context.SaveChangesAsync();  ( L239)  ovo se radi u UnitOfWork*/
        }
        
-            return _mapper.Map<IEnumerable<MessageDto>>(messages);
-       
+           /*  return _mapper.Map<IEnumerable<MessageDto>>(messages); (L240)*/
+             return messages;
         }
 
         public void RemoveConnection(Connection connection)
@@ -134,10 +150,10 @@ namespace API.Data
            _context.Connections.Remove(connection);
         }
 
-        public async  Task<bool> SaveAllAsync()
+       /*  public async  Task<bool> SaveAllAsync()
         {
             return await _context.SaveChangesAsync()>0;
-        }
+        } (L238) */
     }
 
 

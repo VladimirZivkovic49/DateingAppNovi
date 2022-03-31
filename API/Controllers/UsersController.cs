@@ -24,9 +24,11 @@ namespace API.Controllers
    
     public class UsersController :BaseApiController/* ControllerBase*/
     {
-        private readonly IUserRepository _userRepository;
+       /*  private readonly IUserRepository _userRepository; (L239) */
         private readonly IMapper _mapper;
        private readonly IPhotoService _photoService;
+        private readonly IUnitOfWork _unitOfWork;
+
         /* private readonly DataContext _context;
 
 public UsersController(DataContext context)
@@ -36,19 +38,28 @@ _context = context;
 } ( Kada se uvede repository ovo ne treba)*/
 
 
-       /*  public UsersController(IUserRepository userRepository,IMapper mapper)
+        /*  public UsersController(IUserRepository userRepository,IMapper mapper)
+         {
+             _userRepository = userRepository;
+             _mapper = mapper;
+         } */
+        /*  public UsersController(IUserRepository userRepository,
+         IMapper mapper, IPhotoService photoService)
+         {
+             _userRepository = userRepository;
+             _mapper = mapper;
+             _photoService=photoService;
+
+         }  (L239)*/
+
+        public UsersController(
+        IMapper mapper, IPhotoService photoService, IUnitOfWork unitOfWork)
         {
-            _userRepository = userRepository;
-            _mapper = mapper;
-        } */
-        public UsersController(IUserRepository userRepository,
-        IMapper mapper, IPhotoService photoService)
-        {
-            _userRepository = userRepository;
+           
             _mapper = mapper;
             _photoService=photoService;
-        
-        }
+            _unitOfWork = unitOfWork;
+        } 
        
        /* [Authorize(Roles ="Member")] //bilo "Admin" */
         [HttpGet]
@@ -65,7 +76,8 @@ _context = context;
         {
             /* var users= await _userRepository.GetMembersAsync() (L154); */
            //(L157)
-            var user=await _userRepository.GetUsersByUserNameAsync(User.GetUsername());
+           /*  var user=await _userRepository.GetUsersByUserNameAsync(User.GetUsername()); (L239) */
+             var user=await _unitOfWork.UserRepository.GetUsersByUserNameAsync(User.GetUsername());
             userParams.CurrentUserName=user.UserName;
             if(string.IsNullOrEmpty(userParams.Gender))
             {
@@ -74,7 +86,8 @@ _context = context;
             }
            //(L157)
            
-            var users= await _userRepository.GetMembersAsync(userParams);
+            /* var users= await _userRepository.GetMembersAsync(userParams);(L239) */
+                    var users= await _unitOfWork.UserRepository.GetMembersAsync(userParams);
             /* var usersToReturn= _mapper.Map<IEnumerable<MemberDto>>(users); */
            
            Response.AddPaginationHeader(users.CurrentPage,users.PageSize,users.TotalCount
@@ -112,7 +125,8 @@ _context = context;
             /* return await _context.Users.FindAsync(id); */
             /*  return await _userRepository.GetUsersByUserNameAsync(username); */
            /*  var users = await _userRepository.GetUsersByUserNameAsync(username); */
-             return  await _userRepository.GetMemberAsync(username);
+             /* return  await _userRepository.GetMemberAsync(username);  (L239)*/
+             return  await _unitOfWork.UserRepository.GetMemberAsync(username);
            /*  return _mapper.Map<MemberDto>(user); */
         }
 [HttpPut]
@@ -120,11 +134,15 @@ _context = context;
       {
          /*  var username=User.FindFirst(ClaimTypes.NameIdentifier)?.Value; */
          var username=User.GetUsername();
-          var user=await _userRepository.GetUsersByUserNameAsync(username);
+          /* var user=await _userRepository.GetUsersByUserNameAsync(username);  (L239)*/
+           var user=await _unitOfWork.UserRepository.GetUsersByUserNameAsync(username); 
          _mapper.Map(memberUpdateDto,user);
-         _userRepository.Update(user);
+         /* _userRepository.Update(user);  (239)*/
+         _unitOfWork.UserRepository.Update(user);
 
-         if(await _userRepository.SaveAllAsync())
+         /* if(await _userRepository.SaveAllAsync()) (L239) */
+         if(await _unitOfWork.Complete())
+         
          {
              return NoContent();
 
@@ -141,7 +159,9 @@ _context = context;
     public async Task <ActionResult<PhotoDto>> AddPhoto(IFormFile file)
         {
 
-            var user = await _userRepository.GetUsersByUserNameAsync(User.GetUsername());
+           /*  var user = await _userRepository.GetUsersByUserNameAsync(User.GetUsername()); (L239)
+            */
+            var user = await _unitOfWork.UserRepository.GetUsersByUserNameAsync(User.GetUsername());
             var result = await _photoService.AddPhotosAsync(file);
             if(result.Error!= null)
             {
@@ -162,7 +182,8 @@ _context = context;
 
             }
             user.Photos.Add(photo);
-            if(await _userRepository.SaveAllAsync())
+           /*  if(await _userRepository.SaveAllAsync()) (L239)*/
+           if(await _unitOfWork.Complete())
             {
                 /* return _mapper.Map<PhotoDto>(photo); (L129) */
                 /* return CreatedAtRoute("GetMember",_mapper.Map<PhotoDto>(photo));(L129a) */
@@ -177,7 +198,8 @@ _context = context;
     [HttpPut("set-main-photo/{photoId}")]
     public async Task<ActionResult> SetMainPhoto(int photoId)
     {
-        var user= await _userRepository.GetUsersByUserNameAsync(User.GetUsername());
+        /* var user= await _userRepository.GetUsersByUserNameAsync(User.GetUsername()); (L239) */
+      var user= await _unitOfWork.UserRepository.GetUsersByUserNameAsync(User.GetUsername());
         var photo=user.Photos.FirstOrDefault(x=> x.Id==photoId);
         if(photo.IsMain)
         {
@@ -193,7 +215,8 @@ _context = context;
     
         photo.IsMain=true;
    
-    if(await _userRepository.SaveAllAsync())
+    /* if(await _userRepository.SaveAllAsync())  (L239)*/
+    if(await _unitOfWork.Complete())
          {
              return NoContent();
 
@@ -209,7 +232,9 @@ _context = context;
         [HttpDelete("delete-photo/{photoId}")]
         public async Task<ActionResult> DelitePhoto(int photoId)
         {
-            var user = await _userRepository.GetUsersByUserNameAsync(User.GetUsername());
+            /* var user = await _userRepository.GetUsersByUserNameAsync(User.GetUsername()); (L239)*/
+            var user = await _unitOfWork.UserRepository.GetUsersByUserNameAsync(User.GetUsername());
+            
             var photo = user.Photos.FirstOrDefault(x => x.Id == photoId);
 
             if (photo == null)
@@ -236,7 +261,8 @@ _context = context;
 
             user.Photos.Remove(photo);
 
-             if (await _userRepository.SaveAllAsync())
+             /* if (await _userRepository.SaveAllAsync())  (L239)*/
+             if (await _unitOfWork.Complete())
             {
                    return Ok();  
             }

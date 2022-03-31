@@ -97,10 +97,10 @@ namespace API.Data
         
         }
 
-        public async Task<bool> SaveAllAsync()
+       /*  public async Task<bool> SaveAllAsync()
         {
             return await _context.SaveChangesAsync()>0;
-        }
+        } (L238) */
 
         public void Update(AppUser user)
         {
